@@ -3,6 +3,7 @@ using DemoCodeFirst;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoCodeFirst.Migrations
 {
     [DbContext(typeof(MyStockDBContext))]
-    partial class MyStockDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231104114549_initialV2")]
+    partial class initialV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,21 +23,6 @@ namespace DemoCodeFirst.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("CompanyPerson", b =>
-                {
-                    b.Property<int>("CompaniesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PersonsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CompaniesId", "PersonsId");
-
-                    b.HasIndex("PersonsId");
-
-                    b.ToTable("CompanyPerson");
-                });
 
             modelBuilder.Entity("DemoCodeFirst.Category", b =>
                 {
@@ -81,45 +69,6 @@ namespace DemoCodeFirst.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DemoCodeFirst.Company", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Companys");
-                });
-
-            modelBuilder.Entity("DemoCodeFirst.Contact", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Contacts");
-                });
-
             modelBuilder.Entity("DemoCodeFirst.Email", b =>
                 {
                     b.Property<int>("Id")
@@ -159,32 +108,6 @@ namespace DemoCodeFirst.Migrations
                     b.ToTable("People");
                 });
 
-            modelBuilder.Entity("CompanyPerson", b =>
-                {
-                    b.HasOne("DemoCodeFirst.Company", null)
-                        .WithMany()
-                        .HasForeignKey("CompaniesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DemoCodeFirst.Person", null)
-                        .WithMany()
-                        .HasForeignKey("PersonsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DemoCodeFirst.Contact", b =>
-                {
-                    b.HasOne("DemoCodeFirst.Person", "Person")
-                        .WithOne("Contact")
-                        .HasForeignKey("DemoCodeFirst.Contact", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Person");
-                });
-
             modelBuilder.Entity("DemoCodeFirst.Email", b =>
                 {
                     b.HasOne("DemoCodeFirst.Person", "Person")
@@ -198,9 +121,6 @@ namespace DemoCodeFirst.Migrations
 
             modelBuilder.Entity("DemoCodeFirst.Person", b =>
                 {
-                    b.Navigation("Contact")
-                        .IsRequired();
-
                     b.Navigation("Emails");
                 });
 #pragma warning restore 612, 618

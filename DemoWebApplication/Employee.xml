@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Employees>
+	<Employee>
+		<EmpCode>001</EmpCode>
+		<EmpName>Nguyễn Văn An</EmpName>
+		<EmpLocation>Đà Nẵng</EmpLocation>
+	</Employee>
+	<Employee>
+		<EmpCode>002</EmpCode>
+		<EmpName>Bùi Thị Thoa</EmpName>
+		<EmpLocation>Quảng Nam</EmpLocation>
+	</Employee>
+</Employees>

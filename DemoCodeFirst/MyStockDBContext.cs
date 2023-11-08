@@ -11,6 +11,10 @@ namespace DemoCodeFirst
     public class MyStockDBContext : DbContext
     {
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Person> People { get; set; }
+        public DbSet<Email> Emails { get; set; }
+        public DbSet<Company> Companys { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var builder = new ConfigurationBuilder()
