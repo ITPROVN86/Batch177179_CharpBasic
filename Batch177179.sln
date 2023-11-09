@@ -17,6 +17,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoCodeFirstEDM", "DemoCod
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoWebApplication", "DemoWebApplication\DemoWebApplication.csproj", "{16C15AE2-E1FE-4B32-98B5-956C9934B503}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCodeFirstApproachDemo", "MyCodeFirstApproachDemo\MyCodeFirstApproachDemo.csproj", "{7AE3F9DB-3447-494F-B589-9E263228B2F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomobileLibrary", "AutomobileLibrary\AutomobileLibrary.csproj", "{08474C22-500E-4A11-A91E-86DF25B97EDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomobileWebApp", "AutomobileWebApp\AutomobileWebApp.csproj", "{DEA28DC6-D2CC-4955-ADA3-1041BA13B760}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +57,18 @@ Global
 		{16C15AE2-E1FE-4B32-98B5-956C9934B503}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16C15AE2-E1FE-4B32-98B5-956C9934B503}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16C15AE2-E1FE-4B32-98B5-956C9934B503}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AE3F9DB-3447-494F-B589-9E263228B2F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AE3F9DB-3447-494F-B589-9E263228B2F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AE3F9DB-3447-494F-B589-9E263228B2F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AE3F9DB-3447-494F-B589-9E263228B2F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08474C22-500E-4A11-A91E-86DF25B97EDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08474C22-500E-4A11-A91E-86DF25B97EDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08474C22-500E-4A11-A91E-86DF25B97EDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08474C22-500E-4A11-A91E-86DF25B97EDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEA28DC6-D2CC-4955-ADA3-1041BA13B760}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEA28DC6-D2CC-4955-ADA3-1041BA13B760}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEA28DC6-D2CC-4955-ADA3-1041BA13B760}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEA28DC6-D2CC-4955-ADA3-1041BA13B760}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
