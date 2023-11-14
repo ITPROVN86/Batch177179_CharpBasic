@@ -17,11 +17,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoCodeFirstEDM", "DemoCod
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoWebApplication", "DemoWebApplication\DemoWebApplication.csproj", "{16C15AE2-E1FE-4B32-98B5-956C9934B503}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCodeFirstApproachDemo", "MyCodeFirstApproachDemo\MyCodeFirstApproachDemo.csproj", "{7AE3F9DB-3447-494F-B589-9E263228B2F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCodeFirstApproachDemo", "MyCodeFirstApproachDemo\MyCodeFirstApproachDemo.csproj", "{7AE3F9DB-3447-494F-B589-9E263228B2F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomobileLibrary", "AutomobileLibrary\AutomobileLibrary.csproj", "{08474C22-500E-4A11-A91E-86DF25B97EDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomobileLibrary", "AutomobileLibrary\AutomobileLibrary.csproj", "{08474C22-500E-4A11-A91E-86DF25B97EDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomobileWebApp", "AutomobileWebApp\AutomobileWebApp.csproj", "{DEA28DC6-D2CC-4955-ADA3-1041BA13B760}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomobileWebApp", "AutomobileWebApp\AutomobileWebApp.csproj", "{DEA28DC6-D2CC-4955-ADA3-1041BA13B760}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DIDemo", "DIDemo\DIDemo.csproj", "{AA8BBFD9-118A-4F4D-857B-2C55748E95A5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication2", "WebApplication2\WebApplication2.csproj", "{600621C4-E66E-4E66-8530-3022156EB368}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPA", "SPA\SPA.csproj", "{344AC781-6B7C-4C75-A5AA-D452D89F6B92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDemo14112023", "WebDemo14112023\WebDemo14112023.csproj", "{D3A9E2B5-A43B-4D83-BB94-A13C048E6BB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +77,22 @@ Global
 		{DEA28DC6-D2CC-4955-ADA3-1041BA13B760}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEA28DC6-D2CC-4955-ADA3-1041BA13B760}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEA28DC6-D2CC-4955-ADA3-1041BA13B760}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA8BBFD9-118A-4F4D-857B-2C55748E95A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA8BBFD9-118A-4F4D-857B-2C55748E95A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA8BBFD9-118A-4F4D-857B-2C55748E95A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA8BBFD9-118A-4F4D-857B-2C55748E95A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{600621C4-E66E-4E66-8530-3022156EB368}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{600621C4-E66E-4E66-8530-3022156EB368}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{600621C4-E66E-4E66-8530-3022156EB368}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{600621C4-E66E-4E66-8530-3022156EB368}.Release|Any CPU.Build.0 = Release|Any CPU
+		{344AC781-6B7C-4C75-A5AA-D452D89F6B92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{344AC781-6B7C-4C75-A5AA-D452D89F6B92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{344AC781-6B7C-4C75-A5AA-D452D89F6B92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{344AC781-6B7C-4C75-A5AA-D452D89F6B92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3A9E2B5-A43B-4D83-BB94-A13C048E6BB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3A9E2B5-A43B-4D83-BB94-A13C048E6BB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3A9E2B5-A43B-4D83-BB94-A13C048E6BB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3A9E2B5-A43B-4D83-BB94-A13C048E6BB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
