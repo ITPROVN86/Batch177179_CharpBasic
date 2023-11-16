@@ -14,10 +14,23 @@ namespace WebDemo14112023.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Index(LoginModel model)
         {
-            if (model.UserName.Contains("admin") && model.Password.Contains("admin"))
+            if (ModelState.IsValid)
             {
-                TempData["Info"] = "Admin";
-                return RedirectToAction("Index", "Home");
+                if (model.UserName.Contains("admin") && model.Password.Contains("admin"))
+                {
+                    TempData["Info"] = "Admin";
+                    return RedirectToAction("Index", "Home");
+
+                }
+                else
+                {
+                    TempData["Fail"] = "Tên đăng nhập hoặc mật khẩu không đúng!";
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("Error",
+                                 "Please input field full!");
             }
             return View(model);
         }
