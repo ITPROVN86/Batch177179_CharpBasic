@@ -20,7 +20,6 @@ namespace WebDemo14112023.Areas.Admin.Controllers
                 {
                     TempData["Info"] = "Admin";
                     return RedirectToAction("Index", "Home");
-
                 }
                 else
                 {

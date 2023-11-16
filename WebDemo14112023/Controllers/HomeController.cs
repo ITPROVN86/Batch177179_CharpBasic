@@ -26,6 +26,12 @@ namespace WebDemo14112023.Controllers
             return View(model);
         }
 
+        public IActionResult List()
+        {
+            var list = ProductDao.Instance.GetAllProducts().OrderByDescending(p=>p.Price);
+            return View(list);
+        }
+
         public IActionResult Index()
         {
             return View();
