@@ -41,6 +41,21 @@ namespace DatabaseFirstDemo.DAO
             return roles;
         }
 
+        public Role GetById(int id)
+        {
+            Role role;
+            try
+            {
+                using ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
+                role = stock.Roles.SingleOrDefault(r=>r.Id==id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return role;
+        }
+
         public void Insert(Role role)
         {
             try
@@ -54,5 +69,21 @@ namespace DatabaseFirstDemo.DAO
                 throw new Exception(ex.Message);
             }
         }
+
+        public void Update(Role role)
+        {
+            try
+            {
+                using ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
+                stock.Entry<Role>(role).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                stock.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
     }
 }

@@ -11,7 +11,8 @@ namespace DatabaseFirstDemo.Repository
     {
         IEnumerable<Role> GetAll();
         void Insert(Role role);
-       /* void Update(Role role);
-        void Delete(Role role);*/
+       void Update(Role role);
+        Role GetById(int id);
+        /* void Delete(Role role);*/
     }
 }
