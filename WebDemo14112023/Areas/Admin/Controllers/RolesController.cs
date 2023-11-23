@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace WebDemo14112023.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class RolesController : Controller
+    public class RolesController : BaseController
     {
         private readonly ProductMangementBatch177Context _context;
 
@@ -22,10 +22,6 @@ namespace WebDemo14112023.Areas.Admin.Controllers
             roleRepository = new RolesRepository();
         }
 
-        /*    public RolesController(ProductMangementBatch177Context context)
-            {
-                _context = context;
-            }*/
 
         // GET: Admin/Roles
         public async Task<IActionResult> Index()
@@ -73,7 +69,7 @@ namespace WebDemo14112023.Areas.Admin.Controllers
                 if (ModelState.IsValid)
                 {
                     roleRepository.Insert(role);
-                    TempData["Message"] = "Insert Data is success!";
+                    SetAlert("Insert Data is success!", "success");
                     //_context.Add(role);
                     //await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -123,7 +119,7 @@ namespace WebDemo14112023.Areas.Admin.Controllers
                     try
                     {
                         roleRepository.Update(role);
-                        TempData["Message"] = "Update Data is success!";
+                        SetAlert("Update Data is success!", "success");
                         //await _context.SaveChangesAsync();
                     }
                     catch (DbUpdateConcurrencyException)
@@ -149,20 +145,19 @@ namespace WebDemo14112023.Areas.Admin.Controllers
         }
 
         // GET: Admin/Roles/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null || _context.Roles == null)
+            Role role = roleRepository.GetById(id);
+            if (id == null || role == null)
             {
                 return NotFound();
             }
 
-            var role = await _context.Roles
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (role == null)
+            //var role = await _context.Roles.FindAsync(id);
+            /*if (role == null)
             {
                 return NotFound();
-            }
-
+            }*/
             return View(role);
         }
 
@@ -171,17 +166,21 @@ namespace WebDemo14112023.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Roles == null)
+            try
             {
-                return Problem("Entity set 'ProductMangementBatch177Context.Roles'  is null.");
+                var result = roleRepository.GetById(id);
+                if (result == null)
+                {
+                    return Problem("Entity set 'ProductMangementBatch177Context.Roles'  is null.");
+                }
+                roleRepository.Delete(result);
+                SetAlert("Delete Data is success!", "success");
             }
-            var role = await _context.Roles.FindAsync(id);
-            if (role != null)
+            catch (Exception ex)
             {
-                _context.Roles.Remove(role);
+                ModelState.AddModelError("Error",
+                                ex.Message);
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

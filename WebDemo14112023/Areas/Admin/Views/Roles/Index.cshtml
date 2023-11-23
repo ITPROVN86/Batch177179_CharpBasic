@@ -14,13 +14,13 @@
             <div class="panel-body">
                 <div class="col-md-12">
                     <p>
-                        <a asp-action="Create" class="btn btn-danger">Thêm mới</a>
+                        <a class="btn btn-danger create">Thêm mới</a>
                     </p>
                     @{
-                        if (TempData["Message"] != null)
+                        if (TempData["AlertMessage"] != null)
                         {
-                            <div id="alertBox" class="alert alert-danger">
-                                @TempData["Message"]
+                            <div id="alertBox" class="alert @TempData["Type"]">
+                                @TempData["AlertMessage"]
                             </div>
                         }
                     }
@@ -54,8 +54,12 @@
         </section>
     </div>
 </div>
+
+
 @section scripts{
     <script>
+
+     
         $(function () {
             $('#alertBox').removeClass('hide');
             $('#alertBox').delay(5000).slideUp(500);

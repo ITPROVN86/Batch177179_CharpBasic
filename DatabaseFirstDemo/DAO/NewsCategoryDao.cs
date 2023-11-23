@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace DatabaseFirstDemo.DAO
 {
-    public class RolesDao
+    public class NewsCategoryDao
     {
-        private static RolesDao instance;
+        private static NewsCategoryDao instance;
         private static readonly object instanceLock = new object();
-        public static RolesDao Instance
+        public static NewsCategoryDao Instance
         {
             get
             {
@@ -19,49 +19,49 @@ namespace DatabaseFirstDemo.DAO
                 {
                     if (instance == null)
                     {
-                        instance = new RolesDao();
+                        instance = new NewsCategoryDao();
                     }
                     return instance;
                 }
             }
         }
 
-        public List<Role> GetAll()
+        public List<NewsCategory> GetAll()
         {
-            List<Role> roles;
+            List<NewsCategory> newsCategory;
             try
             {
                 using ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
-                roles = stock.Roles.ToList();
+                newsCategory = stock.NewsCategories.ToList();
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-            return roles;
+            return newsCategory;
         }
 
-        public Role GetById(int? id)
+        public NewsCategory GetById(int? id)
         {
-            Role role;
+            NewsCategory newsCategory;
             try
             {
                 using ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
-                role = stock.Roles.SingleOrDefault(r=>r.Id==id);
+                newsCategory = stock.NewsCategories.SingleOrDefault(r=>r.Id==id);
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-            return role;
+            return newsCategory;
         }
 
-        public void Insert(Role role)
+        public void Insert(NewsCategory newsCategory)
         {
             try
             {
                 using ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
-                stock.Add(role);
+                stock.Add(newsCategory);
                 stock.SaveChanges();
             }
             catch (Exception ex)
@@ -70,12 +70,12 @@ namespace DatabaseFirstDemo.DAO
             }
         }
 
-        public void Update(Role role)
+        public void Update(NewsCategory newsCategory)
         {
             try
             {
                 using ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
-                stock.Entry<Role>(role).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                stock.Entry<NewsCategory>(newsCategory).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 stock.SaveChanges();
             }
             catch (Exception ex)
@@ -84,12 +84,12 @@ namespace DatabaseFirstDemo.DAO
             }
         }
 
-        public void Delete(Role role)
+        public void Delete(NewsCategory newsCategory)
         {
             try
             {
                 using ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
-                var rl = stock.Roles.SingleOrDefault(c => c.Id == role.Id);
+                var rl = stock.NewsCategories.SingleOrDefault(c => c.Id == newsCategory.Id);
                 stock.Remove(rl);
                 stock.SaveChanges();
             }
