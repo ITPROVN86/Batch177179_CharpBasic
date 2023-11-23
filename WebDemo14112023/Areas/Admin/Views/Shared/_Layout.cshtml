@@ -83,5 +83,6 @@
     <!--common script init for all pages-->
     <script src="~/admin/js/scripts.js"></script>
     <!--script for this page-->
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

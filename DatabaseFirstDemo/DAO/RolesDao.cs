@@ -1,0 +1,58 @@
+﻿using DatabaseFirstDemo.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DatabaseFirstDemo.DAO
+{
+    public class RolesDao
+    {
+        private static RolesDao instance;
+        private static readonly object instanceLock = new object();
+        public static RolesDao Instance
+        {
+            get
+            {
+                lock (instanceLock)
+                {
+                    if (instance == null)
+                    {
+                        instance = new RolesDao();
+                    }
+                    return instance;
+                }
+            }
+        }
+
+        public List<Role> GetAll()
+        {
+            List<Role> roles;
+            try
+            {
+                using ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
+                roles = stock.Roles.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return roles;
+        }
+
+        public void Insert(Role role)
+        {
+            try
+            {
+                using ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
+                stock.Add(role);
+                stock.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+    }
+}

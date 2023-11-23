@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DatabaseFirstDemo.Models;
+using DatabaseFirstDemo.Repository;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace WebDemo14112023.Areas.Admin.Controllers
 {
@@ -14,17 +16,25 @@ namespace WebDemo14112023.Areas.Admin.Controllers
     {
         private readonly ProductMangementBatch177Context _context;
 
-        public RolesController(ProductMangementBatch177Context context)
+        IRolesRepository roleRepository = null;
+        public RolesController()
         {
-            _context = context;
+            roleRepository = new RolesRepository();
         }
+
+        /*    public RolesController(ProductMangementBatch177Context context)
+            {
+                _context = context;
+            }*/
 
         // GET: Admin/Roles
         public async Task<IActionResult> Index()
         {
-              return _context.Roles != null ? 
-                          View(await _context.Roles.ToListAsync()) :
-                          Problem("Entity set 'ProductMangementBatch177Context.Roles'  is null.");
+            var result = roleRepository.GetAll();
+            return View(result);
+            /* return result != null ?
+                          View(await result) :
+                          Problem("Entity set 'ProductMangementBatch177Context.Roles'  is null.");*/
         }
 
         // GET: Admin/Roles/Details/5
@@ -58,11 +68,21 @@ namespace WebDemo14112023.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Role role)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(role);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    roleRepository.Insert(role);
+                    TempData["Message"] = "Insert Data is success!";
+                    //_context.Add(role);
+                    //await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("Error",
+                                 ex.Message);
             }
             return View(role);
         }
@@ -150,14 +170,14 @@ namespace WebDemo14112023.Areas.Admin.Controllers
             {
                 _context.Roles.Remove(role);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool RoleExists(int id)
         {
-          return (_context.Roles?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Roles?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

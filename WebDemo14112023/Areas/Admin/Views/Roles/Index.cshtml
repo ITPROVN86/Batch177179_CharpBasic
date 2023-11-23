@@ -16,6 +16,14 @@
                     <p>
                         <a asp-action="Create" class="btn btn-danger">Thêm mới</a>
                     </p>
+                    @{
+                        if (TempData["Message"] != null)
+                        {
+                            <div id="alertBox" class="alert alert-danger">
+                                @TempData["Message"]
+                            </div>
+                        }
+                    }
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -46,3 +54,11 @@
         </section>
     </div>
 </div>
+@section scripts{
+    <script>
+        $(function () {
+            $('#alertBox').removeClass('hide');
+            $('#alertBox').delay(5000).slideUp(500);
+        })
+    </script>
+}
