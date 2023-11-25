@@ -22,5 +22,6 @@ namespace DatabaseFirstDemo.Repository
         public void InsertUserDetail(UserDetail userDetail)=> UsersDao.Instance.InsertUserDetail(userDetail);
         public void UpdateUser(User user)=> UsersDao.Instance.UpdateUser(user);
         public void UpdateUserDetail(UserDetail userDetail)=> UsersDao.Instance.UpdateUserDetail(userDetail);
+        public UserDetail GetByUserDetailId(int? id) => UsersDao.Instance.GetByUserDetailId(id);
     }
 }

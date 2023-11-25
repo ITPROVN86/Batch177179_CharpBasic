@@ -90,17 +90,18 @@ namespace WebDemo14112023.Areas.Admin.Controllers
         public IActionResult Edit(int id)
         {
             User user = userRepository.GetById(id);
-            ViewBag.Roles = new SelectList(userRepository.GetAllRoles(), "Id", "Name", user.RoleId);
+            UserDetail userDetail = userRepository.GetByUserDetailId(id);
+            ViewBag.Roles = new SelectList(roleRepository.GetAll(), "Id", "Name", user.RoleId);
             var data = new
             {
                 Id = user.UserId,
-                Name = user.UserName,
-                Password = user.Password,
+                UserName = user.UserName,
+                //Password = user.Password,
                 Status = user.Status,
                 RoleId = user.RoleId,
-                FullName = user.UserDetail.FullName,
-                Address = user.UserDetail.Address,
-                Email = user.UserDetail.Email
+                FullName = userDetail.FullName,
+                Address = userDetail.Address,
+                Email = userDetail.Email
                 // Các trường khác
             };
 
@@ -117,11 +118,16 @@ namespace WebDemo14112023.Areas.Admin.Controllers
                 {
                     UserId = users.UserId,
                     UserName = users.UserName,
-                    Password = Common.Common.EncryptMD5(users.Password),
                     RoleId = users.RoleId,
                     Status = users.Status
                 };
-
+                if(users.Password != null){
+                    user.Password = Common.Common.EncryptMD5(users.Password);
+                }
+                else
+                {
+                    user.Password = userRepository.GetById(users.UserId).Password;
+                }
                 // Lấy giá trị từ các trường thuộc tính của userDetail trong form
                 var userDetail = new UserDetail
                 {

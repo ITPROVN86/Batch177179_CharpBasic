@@ -21,5 +21,6 @@ namespace DatabaseFirstDemo.Repository
         void InsertUserDetail(UserDetail userDetail);
         void UpdateUser(User user);
         void UpdateUserDetail(UserDetail userDetail);
+        UserDetail GetByUserDetailId(int? id);
     }
 }

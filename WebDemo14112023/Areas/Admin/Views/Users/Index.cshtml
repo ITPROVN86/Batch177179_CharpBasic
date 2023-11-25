@@ -112,7 +112,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Password">Mật khẩu</label>
-                        <input type="password" class="form-control" id="Password" name="Password" placeholder="Nhập mật khẩu" required>
+                        <input type="password" class="form-control" id="Password" name="Password" placeholder="Nhập mật khẩu">
                     </div>
                     <div class="form-group">
                         <label for="FullName">Họ và tên</label>
@@ -234,12 +234,12 @@
                         $('.modal-title').text('Edit Users');
                         $('#btn-save').attr('data-action', '@Url.Action("Edit", "Users")');
                         $('#UserId').val(response.data.id);
-                        $('#UserName').val(response.data.name);
-                        $('#FullName').val(response.data.name);
-                        $('#RoleId').val(response.data.name);
-                        $('#Address').val(response.data.name);
-                        $('#Email').val(response.data.name);
-                        $('#Status').val(response.data.name);
+                        $('#UserName').val(response.data.userName);
+                        $('#FullName').val(response.data.fullName);
+                        $('#cboRoleId').val(response.data.roleId);
+                        $('#Address').val(response.data.address);
+                        $('#Email').val(response.data.email);
+                        $('#Status').prop('checked', response.data.status);
                     } else {
                         alert(response.message);
                     }

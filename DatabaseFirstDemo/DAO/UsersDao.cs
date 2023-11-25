@@ -44,11 +44,26 @@ namespace DatabaseFirstDemo.DAO
 
         public User GetById(int? id)
         {
-            User userDetail;
+            User user;
             try
             {
                 using ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
-                userDetail = stock.Users.SingleOrDefault(r => r.UserId == id);
+                user = stock.Users.SingleOrDefault(r => r.UserId == id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return user;
+        }
+
+        public UserDetail GetByUserDetailId(int? id)
+        {
+            UserDetail userDetail;
+            try
+            {
+                using ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
+                userDetail = stock.UserDetails.SingleOrDefault(r => r.UserId == id);
             }
             catch (Exception ex)
             {
