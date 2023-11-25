@@ -17,11 +17,16 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\Admin\Models\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DatabaseFirstDemo\DatabaseFirstDemo.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="App_Code\Common.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
 </Project>

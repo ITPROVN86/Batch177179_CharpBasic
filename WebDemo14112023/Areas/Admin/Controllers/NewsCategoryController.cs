@@ -12,8 +12,11 @@ namespace WebDemo14112023.Areas.Admin.Controllers
         {
             newsCategoryRepository = new NewsCategoryRepository();
         }
+
         public IActionResult Index()
         {
+            /*ProductMangementBatch177Context _context = new ProductMangementBatch177Context();
+            var list = _context.NewsCategories.ToList();*/
             var result = newsCategoryRepository.GetAll();
             return View(result);
         }
@@ -29,12 +32,12 @@ namespace WebDemo14112023.Areas.Admin.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
-                {
+       /*         if (ModelState.IsValid)
+                {*/
                     newsCategoryRepository.Insert(newCategory);
                     SetAlert("Insert Data is success!", "success");
                     return Json(new { success = true });
-                }
+                /*}*/
             }
             catch (Exception ex)
             {
@@ -43,11 +46,19 @@ namespace WebDemo14112023.Areas.Admin.Controllers
             return Json(new { success = false });
         }
 
-      /*  public IActionResult Edit(int id)
+        [HttpGet]
+        public IActionResult Edit(int id)
         {
             NewsCategory newCategory = newsCategoryRepository.GetById(id);
-            return View(newCategory);
-        }*/
+            var data = new
+            {
+                Id = newCategory.Id,
+                Name = newCategory.CategoryName
+                // Các trường khác
+            };
+
+            return new JsonResult(new { success = true, data = data });
+        }
 
         [HttpPost]
         public JsonResult Edit(NewsCategory newCategory)
@@ -60,6 +71,22 @@ namespace WebDemo14112023.Areas.Admin.Controllers
                     SetAlert("Update Data is success!", "success");
                     return Json(new { success = true });
                 }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+            return Json(new { success = false });
+        }
+
+        [HttpPost]
+        public JsonResult Delete(NewsCategory newCategory)
+        {
+            try
+            {
+                newsCategoryRepository.Delete(newCategory);
+                SetAlert("Delete Data is success!", "success");
+                return Json(new { success = true });
             }
             catch (Exception ex)
             {

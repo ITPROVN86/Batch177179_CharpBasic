@@ -26,7 +26,7 @@ namespace DatabaseFirstDemo.DAO
             }
         }
 
-        public List<Role> GetAll()
+        public IEnumerable<Role> GetAll()
         {
             List<Role> roles;
             try

@@ -5710,3 +5710,12 @@ right: -1px;
     -o-transition: none;
     transition: none;
 }
+th{
+    text-align: center;
+}
+.table thead > tr > th {
+    border: 1px solid #efefef;
+    background-color: #1fb5ad;
+    color: white;
+
+}
