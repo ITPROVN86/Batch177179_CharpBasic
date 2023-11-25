@@ -65,18 +65,17 @@ namespace WebDemo14112023.Areas.Admin.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
-                {
+              /*  if (ModelState.IsValid)
+                {*/
                     newsCategoryRepository.Update(newCategory);
                     SetAlert("Update Data is success!", "success");
-                    return Json(new { success = true });
-                }
+                /*}*/
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, message = ex.Message });
             }
-            return Json(new { success = false });
+            return Json(new { success = true });
         }
 
         [HttpPost]
@@ -86,13 +85,13 @@ namespace WebDemo14112023.Areas.Admin.Controllers
             {
                 newsCategoryRepository.Delete(newCategory);
                 SetAlert("Delete Data is success!", "success");
-                return Json(new { success = true });
+                
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, message = ex.Message });
             }
-            return Json(new { success = false });
+            return Json(new { success = true });
         }
 
     }

@@ -129,7 +129,7 @@
         
         $(document).on('click', '.edit', function () {
             var id = $(this).data('id');
-            var name = $(this).data('name');
+            //var name = $(this).data('name');
             $.get('@Url.Action("Edit", "NewsCategory")', { id: id})
                 .done(function (response) {
                     if (response.success) {
