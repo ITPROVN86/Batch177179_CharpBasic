@@ -217,8 +217,10 @@ namespace DatabaseFirstDemo.DAO
             try
             {
                 using ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
-                var rl = stock.Users.SingleOrDefault(c => c.UserId == user.UserId);
-                stock.Remove(rl);
+                var us = stock.Users.SingleOrDefault(c => c.UserId == user.UserId);
+                var usdt = stock.UserDetails.SingleOrDefault(c => c.UserId == user.UserId);
+                stock.Remove(usdt);
+                stock.Remove(us);
                 stock.SaveChanges();
             }
             catch (Exception ex)

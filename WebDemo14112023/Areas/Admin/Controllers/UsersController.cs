@@ -76,14 +76,14 @@ namespace WebDemo14112023.Areas.Admin.Controllers
                 userDetail.UserId = user.UserId;
                 userRepository.InsertUserDetail(userDetail);
                 SetAlert("Insert Data is success!", "success");
-                    return Json(new { success = true });
+                   
                /* }*/
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, message = ex.Message });
             }
-            return Json(new { success = false });
+            return Json(new { success = true });
         }
 
         [HttpGet]
@@ -139,13 +139,13 @@ namespace WebDemo14112023.Areas.Admin.Controllers
                 userRepository.UpdateUser(user);
                 userRepository.UpdateUserDetail(userDetail);
                 SetAlert("Update Data is success!", "success");
-                return Json(new { success = true });
+               
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, message = ex.Message });
             }
-            return Json(new { success = false });
+            return Json(new { success = true });
         }
 
         [HttpPost]
@@ -171,6 +171,28 @@ namespace WebDemo14112023.Areas.Admin.Controllers
             {
                 status = result
             });
+        }
+
+        [HttpGet]
+        public IActionResult Detail(int id)
+        {
+            User user = userRepository.GetById(id);
+            UserDetail userDetail = userRepository.GetByUserDetailId(id);
+            //ViewBag.Roles = new SelectList(roleRepository.GetAll(), "Id", "Name", user.RoleId);
+            var data = new
+            {
+                Id = user.UserId,
+                UserName = user.UserName,
+                //Password = user.Password,
+                Status = Convert.ToBoolean(user.Status)?"Hoạt động":"Khoá",
+                RoleId = roleRepository.GetById(user.RoleId).Name,
+                FullName = userDetail.FullName,
+                Address = userDetail.Address,
+                Email = userDetail.Email
+                // Các trường khác
+            };
+
+            return new JsonResult(new { success = true, data = data });
         }
     }
 }

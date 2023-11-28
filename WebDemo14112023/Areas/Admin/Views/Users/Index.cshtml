@@ -50,7 +50,7 @@
                                 <th>
                                     Quyền truy cập
                                 </th>
-                                <th></th>
+                                <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,7 +85,7 @@
                                     </td>
                                     <td>
                                         <button class="btn btn-danger edit" data-id="@item.UserId">Sửa</button>&nbsp;
-                                        <a class="btn btn-danger" asp-action="Details" asp-route-id="@item.UserId">Chi tiết</a> &nbsp;
+                                        <button class="btn btn-danger detail" data-id="@item.UserId">Chi tiết</button>&nbsp;
                                         <a class="btn btn-danger delete" data-id="@item.UserId">Xoá</a>
                                     </td>
                                 </tr>
@@ -146,6 +146,53 @@
         </div>
     </div>
 </div>
+<div id="modal-form-detail" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col-lg-6">
+                        <label for="UserName">Tên đăng nhập: </label>
+                        <lable id="UserNameDetail" style="font-weight: bold"></lable>
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="FullName">Họ và tên: </label>
+                        <lable id="FullNameDetail" style="font-weight: bold"></lable>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-6">
+                        <label>Quyền truy cập: </label>
+                        <lable id="RoleDetail" style="font-weight: bold"></lable>
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="Address">Địa chỉ: </label>
+                        <lable id="AddressDetail" style="font-weight: bold"></lable>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="Email">Thư điện tử: </label>
+                            <lable id="EmailDetail" style="font-weight: bold"></lable>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="Status">Trạng thái: </label>
+                            <lable id="StatusDetail" style="font-weight: bold"></lable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Delete Modal -->
 <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -170,14 +217,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
     <script>
 
-        $(document).ready(function () {
-            // Create User
-            $(document).on('click', '.create', function () {
-                $('#modal-form').modal('show');
-                $('.modal-title').text('Create User');
-                $('#btn-save').attr('data-action', '@Url.Action("Create", "Users")');
-                $('#form-users').trigger('reset');
-            });
+        // Create User
+        $(document).on('click', '.create', function () {
+            $('#modal-form').modal('show');
+            $('.modal-title').text('Tạo mới người dùng');
+            $('#btn-save').attr('data-action', '@Url.Action("Create", "Users")');
+            $('#form-users').trigger('reset');
+        });
+        // Detail User
+        $(document).on('click', '.detail', function () {
+            var id = $(this).data('id');
+            $.get('@Url.Action("Detail", "Users")', { id: id })
+                .done(function (response) {
+                    if (response.success) {
+                        $('#modal-form-detail').modal('show');
+                        $('.modal-title').text('Hiển thị thông tin chi tiết người dùng');
+                        $('#UserNameDetail').text(response.data.userName);
+                        $('#FullNameDetail').text(response.data.fullName);
+                        $('#RoleDetail').text(response.data.roleId);
+                        $('#AddressDetail').text(response.data.address);
+                        $('#EmailDetail').text(response.data.email);
+                        $('#StatusDetail').text(response.data.status);
+                    } else {
+                        alert(response.message);
+                    }
+                })
+                .fail(function (error) {
+                    console.log(error);
+                });
         });
         // Save user
         $(document).on('click', '#btn-save', function () {
@@ -229,9 +296,8 @@
             $.get('@Url.Action("Edit", "Users")', { id: id })
                 .done(function (response) {
                     if (response.success) {
-                        console.log(response.data.id);
                         $('#modal-form').modal('show');
-                        $('.modal-title').text('Edit Users');
+                        $('.modal-title').text('Chỉnh sửa người dùng');
                         $('#btn-save').attr('data-action', '@Url.Action("Edit", "Users")');
                         $('#UserId').val(response.data.id);
                         $('#UserName').val(response.data.userName);
@@ -262,7 +328,7 @@
             //var url = '/NewsCategory/Delete/' + id;
             console.log(id);
             //console.log(url);
-            $.post('@Url.Action("Delete", "Users")', { id: id })
+            $.post('@Url.Action("Delete", "Users")', { userId: id })
                 .done(function (response) {
                     if (response.success) {
                         $('#modal-delete').modal('hide');

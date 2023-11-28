@@ -159,9 +159,6 @@
         // Delete product
         $(document).on('click', '#btn-delete', function () {
             var id = $('#delete-id').val();
-            //var url = '/NewsCategory/Delete/' + id;
-            console.log(id);
-            //console.log(url);
             $.post('@Url.Action("Delete", "NewsCategory")', { id: id })
                 .done(function (response) {
                     if (response.success) {
