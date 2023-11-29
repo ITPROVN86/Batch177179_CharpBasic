@@ -42,6 +42,75 @@ namespace DatabaseFirstDemo.DAO
             return user;
         }
 
+        public List<UserDetail> GetUserDetailByKeyword(string keyword)
+        {
+            List<UserDetail> user;
+            try
+            {
+                using ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
+                user = stock.UserDetails.Where(p => p.FullName.ToLower().Contains(keyword) || p.Address.ToLower().Contains(keyword)).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return user;
+        }
+
+        public List<User> GetUserByKeyword(string keyword, string sortBy)
+        {
+            List<User> users = new List<User>();
+            try
+            {
+                using ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
+                var usersQuery = stock.Users
+            .Join(stock.UserDetails,
+                user => user.UserId,
+                detail => detail.UserId,
+                (user, detail) => new { User = user, Detail = detail });
+                if (!String.IsNullOrEmpty(keyword))
+                {
+                    usersQuery = stock.Users
+                        .Join(stock.UserDetails,
+                            user => user.UserId,
+                            detail => detail.UserId,
+                            (user, detail) => new { User = user, Detail = detail })
+                        .Where(u => u.Detail.FullName.ToLower().Contains(keyword)
+                                    || u.Detail.Address.ToLower().Contains(keyword));
+                }
+
+                switch (sortBy)
+                {
+                    case "name":
+                        usersQuery = usersQuery.OrderBy(o => o.User.UserName);
+                        break;
+                    case "namedesc":
+                        usersQuery = usersQuery.OrderByDescending(o => o.User.UserName);
+                        break;
+                    case "fullname":
+                        usersQuery = usersQuery.OrderBy(o => o.Detail.FullName);
+                        break;
+                    case "fullnamedesc":
+                        usersQuery = usersQuery.OrderByDescending(o => o.Detail.FullName);
+                        break;
+                    case "address":
+                        usersQuery = usersQuery.OrderBy(o => o.Detail.Address);
+                        break;
+                    case "addressdesc":
+                        usersQuery = usersQuery.OrderByDescending(o => o.Detail.Address);
+                        break;
+                    default:
+                        break;
+                }
+                users = usersQuery.Select(u => u.User).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return users;
+        }
+
         public User GetById(int? id)
         {
             User user;

@@ -2,6 +2,7 @@
 using DatabaseFirstDemo.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,5 +24,8 @@ namespace DatabaseFirstDemo.Repository
         public void UpdateUser(User user)=> UsersDao.Instance.UpdateUser(user);
         public void UpdateUserDetail(UserDetail userDetail)=> UsersDao.Instance.UpdateUserDetail(userDetail);
         public UserDetail GetByUserDetailId(int? id) => UsersDao.Instance.GetByUserDetailId(id);
+
+        public List<UserDetail> GetUserDetailByKeyword(string keyword) => UsersDao.Instance.GetUserDetailByKeyword(keyword);
+        public List<User> GetUserByKeyword(string keyword, string sortBy) => UsersDao.Instance.GetUserByKeyword(keyword, sortBy);
     }
 }

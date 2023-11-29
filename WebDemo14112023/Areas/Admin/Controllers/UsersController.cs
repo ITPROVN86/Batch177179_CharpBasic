@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
+using System.Drawing.Printing;
 using WebDemo14112023.Areas.Admin.Models;
+using X.PagedList;
 
 namespace WebDemo14112023.Areas.Admin.Controllers
 {
@@ -19,8 +21,9 @@ namespace WebDemo14112023.Areas.Admin.Controllers
             userRepository = new UsersRepository();
             roleRepository = new RolesRepository();
         }
-        public IActionResult Index()
+        public IActionResult Index(string? searchString, int? page, string sortBy)
         {
+
             // Lấy danh sách quyền truy cập từ Repository hoặc Database
             IEnumerable<Role> roles = roleRepository.GetAll();
 
@@ -29,17 +32,39 @@ namespace WebDemo14112023.Areas.Admin.Controllers
 
             // Lưu SelectList vào ViewBag để sử dụng trong View
             ViewBag.Roles = selectList;
-
-            IEnumerable<User> users = userRepository.GetAll();
-            IEnumerable<UserDetail> usersdetail = userRepository.GetUserDetailAll();
-            return View(new RoleUser
+            ICollection<UserDetail> usersdetail = new List<UserDetail>();
+            usersdetail = userRepository.GetUserDetailAll().ToList();
+            ICollection<User> users= new List<User>();
+           /* if (searchString != null)
+            {
+                searchString = searchString.ToLower();*/
+                TempData["searchString"] = searchString!=null? searchString.ToLower():"";
+                //usersdetail = userRepository.GetUserDetailByKeyword(searchString);
+                users = userRepository.GetUserByKeyword(searchString, sortBy).ToList();
+         /*   }
+            else
+            {
+                
+                users = userRepository.GetAll().ToList();
+            }*/
+            var roleUser = new RoleUser
+            {
+                Roles = (ICollection<Role>)roles,
+                //Users = (ICollection<User>)users,
+                UserDetails = (ICollection<UserDetail>)usersdetail,
+            };
+          /*  return View(new RoleUser
             {
                 Roles = (ICollection<Role>)roles,
                 Users = (ICollection<User>)users,
                 UserDetails = (ICollection<UserDetail>)usersdetail,
-            });
-            //return View(users);
+            });*/
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            roleUser.Users = users.ToPagedList(pageNumber, pageSize);
+            return View(roleUser);
         }
+
 
         // GET: Admin/Roles/Create
         public IActionResult Create()
@@ -76,8 +101,8 @@ namespace WebDemo14112023.Areas.Admin.Controllers
                 userDetail.UserId = user.UserId;
                 userRepository.InsertUserDetail(userDetail);
                 SetAlert("Insert Data is success!", "success");
-                   
-               /* }*/
+
+                /* }*/
             }
             catch (Exception ex)
             {
@@ -121,7 +146,8 @@ namespace WebDemo14112023.Areas.Admin.Controllers
                     RoleId = users.RoleId,
                     Status = users.Status
                 };
-                if(users.Password != null){
+                if (users.Password != null)
+                {
                     user.Password = Common.Common.EncryptMD5(users.Password);
                 }
                 else
@@ -139,7 +165,7 @@ namespace WebDemo14112023.Areas.Admin.Controllers
                 userRepository.UpdateUser(user);
                 userRepository.UpdateUserDetail(userDetail);
                 SetAlert("Update Data is success!", "success");
-               
+
             }
             catch (Exception ex)
             {
@@ -184,7 +210,7 @@ namespace WebDemo14112023.Areas.Admin.Controllers
                 Id = user.UserId,
                 UserName = user.UserName,
                 //Password = user.Password,
-                Status = Convert.ToBoolean(user.Status)?"Hoạt động":"Khoá",
+                Status = Convert.ToBoolean(user.Status) ? "Hoạt động" : "Khoá",
                 RoleId = roleRepository.GetById(user.RoleId).Name,
                 FullName = userDetail.FullName,
                 Address = userDetail.Address,

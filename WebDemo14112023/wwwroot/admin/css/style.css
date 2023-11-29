@@ -6734,3 +6734,21 @@ th {
 .form-control {
     color: #111111;
 }
+.processing-preview {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    width: 32px;
+    height: 32px;
+    background: url(../images/loading.gif) center no-repeat;
+    background-size: contain;
+}
+
+.submit-progress-bg {
+    background-color: lightgray;
+    opacity: .5;
+}
+th a{
+    color:white;
+}
