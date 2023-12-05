@@ -19,7 +19,8 @@
                         $('#EmailDetail').text(response.data.email);
                         $('#StatusDetail').text(response.data.status);
                     } else {
-                        alert(response.message);
+                        $('modal-fail').modal('show');
+                        //alert(response.message);
                     }
                 })
                 .fail(function (error) {
@@ -27,7 +28,8 @@
                 });
         });
         // Save user
-        $(document).on('click', '#btn-save', function () {
+        $(document).on('click', '#btn-save', function (event) {
+            event.preventDefault();  // Chặn hành động gửi form mặc định
             var form = $('#form-users');
             var userDetail = {
                 FullName: $('#FullName').val(),
@@ -60,7 +62,11 @@
                     if (response.success) {
                         location.reload();
                     } else {
-                        alert(response.message);
+                        //$('#modal-form').modal('hide');
+                        //$('#modal-fail').modal('show');
+                        $('#alert-fail').removeClass('hidden');
+                        $('#alert-fail').text('Yêu cầu nhập đầy đủ thông tin');
+                        //alert(response.message);
                     }
                 },
                 error: function (error) {
@@ -71,6 +77,7 @@
 
         // Edit product
         $(document).on('click', '.edit', function () {
+            $('#alert-fail').addClass('hidden');
             var id = $(this).data('id');
             //@Url.Action("Edit", "Users")
             $.get('/Admin/Users/Edit', { id: id })
@@ -106,7 +113,7 @@
         $(document).on('click', '#btn-delete', function () {
             var id = $('#delete-id').val();
             //var url = '/NewsCategory/Delete/' + id;
-            console.log(id);
+            //console.log(id);
             //@Url.Action("Delete", "Users")
             $.post('/Admin/Users/Delete', { userId: id })
                 .done(function (response) {
@@ -124,6 +131,7 @@
 
         // Create User
         $(document).on('click', '.create', function () {
+            $('#alert-fail').addClass('hidden');
             $('#modal-form').modal('show');
             $('.modal-title').text('Tạo mới người dùng');
             //@Url.Action("Create", "Users")

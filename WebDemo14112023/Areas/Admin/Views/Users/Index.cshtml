@@ -16,22 +16,24 @@
                 Quản lý Người dùng
             </header>
             <div class="panel-body">
-                @using (Html.BeginForm("Index", "Users", FormMethod.Get, new { id="form-search"}))
+                @using (Html.BeginForm("Index", "Users", FormMethod.Get, new { id = "form-search" }))
                 {
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-lg-6">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-lg-4">
                                 @Html.TextBox("SearchString", TempData["searchString"],null,new {@class="form-control", @placeholder="Nhập từ khoá cần tìm kiếm"})
-                                </div>
-
-                                <div class="col-lg-6">
+                            </div>
+                            <div class="col-lg-4">
+                                @Html.DropDownList("RoleId", (SelectList)ViewBag.Roles,"-- Chọn quyền hạn --",  new { @class ="form-control", @id = "cboSearchRoleId", @onchange = "callIndexAction(this)" })
+                            </div>
+                            <div class="col-lg-4">
                                 <input type="submit" onclick="return DisplayProgressMessage(this, 'Searching...');" class="btn btn-danger" value="Tìm kiếm" />
-                                </div>
                             </div>
                         </div>
+                    </div>
                     <div style="clear: both"></div>
-                    }
-  
+                }
+
                 <div class="col-md-12" style="margin-top:10px">
                     <p>
                         <a class="btn btn-danger create">Tạo mới</a>
@@ -53,7 +55,7 @@
                                         var sortBy = Context.Request.Query["sortby"] == "name" ? "namedesc" : "name";
                                     }
                                     <a href="@Url.Action("Index","Users",new {sortBy=sortBy,SearchString=@Context.Request.Query["SearchString"]})">
-                                    Tên đăng nhập
+                                        Tên đăng nhập
                                     </a>
                                 </th>
                                 <th>
@@ -61,7 +63,7 @@
                                         sortBy = Context.Request.Query["sortby"] == "fullname" ? "fullnamedesc" : "fullname";
                                     }
                                     <a href="@Url.Action("Index","Users",new {sortBy=sortBy,SearchString=@Context.Request.Query["SearchString"]})">
-                                    Họ tên
+                                        Họ tên
                                     </a>
                                 </th>
                                 <th>
@@ -69,7 +71,7 @@
                                         sortBy = Context.Request.Query["sortby"] == "address" ? "addressdesc" : "address";
                                     }
                                     <a href="@Url.Action("Index","Users",new {sortBy=sortBy,SearchString=@Context.Request.Query["SearchString"]})">
-                                    Địa chỉ
+                                        Địa chỉ
                                     </a>
                                 </th>
                                 <th>
@@ -139,13 +141,13 @@
                     <div class="pull-right">
                         @Html.PagedListPager((IPagedList)Model.Users, page => Url.Action("Index", new {page = page,
                         SearchString = @Context.Request.Query["SearchString"], sortby = @Context.Request.Query["sortby"]}),
-                    new X.PagedList.Web.Common.PagedListRenderOptions {
-                    LiElementClasses = new string[] {"page-item"},
-                    PageClasses = new string[] { "page-link" }
-                    })
+                        new X.PagedList.Web.Common.PagedListRenderOptions {
+                        LiElementClasses = new string[] {"page-item"},
+                        PageClasses = new string[] { "page-link" }
+                        })
                     </div>
                 </div>
-               
+
             </div>
         </section>
     </div>
@@ -159,6 +161,7 @@
             </div>
             <div class="modal-body">
                 <form id="form-users" method="post" action="#">
+                    <div class="alert alert-danger hidden" id="alert-fail"></div>
                     <div class="form-group">
                         <label for="UserName">Tên đăng nhập</label>
                         <input type="text" class="form-control" id="UserName" name="UserName" placeholder="Nhập tên đăng nhập" required>
@@ -194,7 +197,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="btn-save">Save</button>
+                <button type="submit" class="btn btn-primary" id="btn-save">Lưu lại</button>
             </div>
         </div>
     </div>
@@ -266,12 +269,49 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modal-fail" tabindex="1" role="dialog" aria-labelledby="failModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Yêu cầu nhập đầy đủ thông tin vào Form
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="processing-preview hidden">
 </div>
 @section scripts{
     @*   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script> *@
-    <script src="~/admin/js/controllers/usersController.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    @{
+        DateTime date = DateTime.Now;
+    }
+    <script src="~/admin/js/controllers/usersController.js?v=@date.Ticks"></script>
     <script>
+        $(document).ready(function () {
+            $('#form-users').validate({
+                submitHandler: function (form) {
+                    $.ajax({
+                        url: $(form).data('action'),
+                        type: 'POST',
+                        data: $(form).serialize(),
+                        success: function (response) {
+                            if (response.success) {
+                                location.reload();
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                }
+            });
+        });
         $(function () {
             $('#alertBox').removeClass('hide');
             $('#alertBox').delay(5000).slideUp(500);
@@ -288,8 +328,18 @@
             //submit the form.
             setTimeout(function () {
                 $("#form-search").submit();
-            }, 5000);
+            }, 1000);
             return true;
+        }
+        function callIndexAction(select) {
+            var selectedValue = select.value;
+            // Gray out background on page
+            $("body").addClass("submit-progress-bg");
+            // Wrap in setTimeout so the UI can update the spinners
+            $(".processing-preview").removeClass("hidden");
+            setTimeout(function () {
+                $("#form-search").submit();
+            }, 1000);
         }
     </script>
                     }

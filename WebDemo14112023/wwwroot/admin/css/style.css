@@ -6752,3 +6752,9 @@ th {
 th a{
     color:white;
 }
+label.error {
+    color: red;
+}
+input.error {
+    border: 1px solid red;
+}

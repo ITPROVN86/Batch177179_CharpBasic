@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DatabaseFirstDemo.Models;
 
 public partial class Order
 {
+    [Display(Name ="Mã đặt hàng")]
     public int Id { get; set; }
 
     public int UserId { get; set; }

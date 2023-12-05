@@ -57,7 +57,7 @@ namespace DatabaseFirstDemo.DAO
             return user;
         }
 
-        public List<User> GetUserByKeyword(string keyword, string sortBy)
+        public List<User> GetUserByKeyword(string keyword, string sortBy, int? roleId)
         {
             List<User> users = new List<User>();
             try
@@ -76,7 +76,9 @@ namespace DatabaseFirstDemo.DAO
                             detail => detail.UserId,
                             (user, detail) => new { User = user, Detail = detail })
                         .Where(u => u.Detail.FullName.ToLower().Contains(keyword)
-                                    || u.Detail.Address.ToLower().Contains(keyword));
+                                    || u.Detail.Address.ToLower().Contains(keyword)
+                                    || u.User.UserName.ToLower().Contains(keyword)
+                                    );
                 }
 
                 switch (sortBy)
@@ -102,7 +104,14 @@ namespace DatabaseFirstDemo.DAO
                     default:
                         break;
                 }
-                users = usersQuery.Select(u => u.User).ToList();
+                if (roleId != null)
+                {
+                    users = usersQuery.Where(u => u.User.RoleId == roleId).Select(u => u.User).ToList();
+                }
+                else
+                {
+                    users = usersQuery.Select(u => u.User).ToList();
+                }
             }
             catch (Exception ex)
             {

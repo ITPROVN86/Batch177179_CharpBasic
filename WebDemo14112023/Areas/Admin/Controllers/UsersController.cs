@@ -21,7 +21,7 @@ namespace WebDemo14112023.Areas.Admin.Controllers
             userRepository = new UsersRepository();
             roleRepository = new RolesRepository();
         }
-        public IActionResult Index(string? searchString, int? page, string sortBy)
+        public IActionResult Index(string? searchString, int? page, string sortBy, int? roleId)
         {
 
             // Lấy danh sách quyền truy cập từ Repository hoặc Database
@@ -40,7 +40,7 @@ namespace WebDemo14112023.Areas.Admin.Controllers
                 searchString = searchString.ToLower();*/
                 TempData["searchString"] = searchString!=null? searchString.ToLower():"";
                 //usersdetail = userRepository.GetUserDetailByKeyword(searchString);
-                users = userRepository.GetUserByKeyword(searchString, sortBy).ToList();
+                users = userRepository.GetUserByKeyword(searchString, sortBy, roleId).ToList();
          /*   }
             else
             {
