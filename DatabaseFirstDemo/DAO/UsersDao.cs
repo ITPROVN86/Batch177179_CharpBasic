@@ -315,5 +315,13 @@ namespace DatabaseFirstDemo.DAO
             stock.SaveChanges();
             return (bool)user.Status;
         }
+
+        public User CheckLogin(string userName, string password)
+        {
+            User user;
+            using ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
+            user = stock.Users.SingleOrDefault(u=>u.UserName.Equals(userName)&&u.Password.Equals(password));
+            return user;
+        }
     }
 }

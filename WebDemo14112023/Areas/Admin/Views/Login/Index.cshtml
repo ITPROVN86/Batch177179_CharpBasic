@@ -27,10 +27,10 @@
                 <h2 class="form-signin-heading">Đăng nhập</h2>
                 <div class="login-wrap">
                     @{
-                        if (TempData["Fail"] != null)
+                        if (TempData["AlertMessage"] != null)
                         {
-                            <div id="alertBox" class="alert alert-danger">
-                                @TempData["Fail"]
+                            <div id="alertBox" class="alert @TempData["Type"]">
+                                @TempData["AlertMessage"]
                             </div>
                         }
                     }

@@ -27,5 +27,6 @@ namespace DatabaseFirstDemo.Repository
 
         public List<UserDetail> GetUserDetailByKeyword(string keyword) => UsersDao.Instance.GetUserDetailByKeyword(keyword);
         public List<User> GetUserByKeyword(string keyword, string sortBy, int? roleId) => UsersDao.Instance.GetUserByKeyword(keyword, sortBy, roleId);
+        public User CheckLogin(string userName, string password)=>UsersDao.Instance.CheckLogin(userName, password);
     }
 }
