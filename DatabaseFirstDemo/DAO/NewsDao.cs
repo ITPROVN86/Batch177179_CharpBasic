@@ -42,16 +42,16 @@ namespace DatabaseFirstDemo.DAO
         }
 
 
-        public List<News> GetNewsByKeyword(string keyword, string sortBy, int? categoryId)
+        public IEnumerable<News> GetNewsByKeyword(string keyword, string sortBy, int? categoryId)
         {
             List<News> news = new List<News>();
             try
             {
                 ProductMangementBatch177Context stock = new ProductMangementBatch177Context();
-                var newsQuery = stock.News;
+                IQueryable<News> newsQuery = stock.News;
                 if (!String.IsNullOrEmpty(keyword))
                 {
-                    newsQuery = (Microsoft.EntityFrameworkCore.DbSet<News>)stock.News.Where(u => u.Title.ToLower().Contains(keyword));
+                    newsQuery = newsQuery.Where(u => u.Title != null && u.Title.ToLower().Contains(keyword)); // Remove ToList() here
                 }
 
                 switch (sortBy)

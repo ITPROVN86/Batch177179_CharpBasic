@@ -26,5 +26,6 @@ namespace DatabaseFirstDemo.Repository
         List<UserDetail> GetUserDetailByKeyword(string keyword);
         List<User> GetUserByKeyword(string keyword, string sortBy, int? roleId);
         User CheckLogin(string userName, string password);
+        User GetByUserName(string userName);
     }
 }

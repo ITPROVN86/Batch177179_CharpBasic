@@ -32,14 +32,17 @@
             event.preventDefault();  // Chặn hành động gửi form mặc định
             var form = $('#form-news');
             var data = form.serializeArray();
-            // Lấy giá trị từ các trường thuộc tính của user trong form
+            // Lấy giá trị từ các trường thuộc tính của news trong form
             // Ví dụ:
             var news = {
+                Id: $('#Id').val(),
+                UserId: $('#UserId').val(),
                 Title: $('#Title').val(),
                 Description: $('#Description').val(),
                 SubjectContent: $('#SubjectContent').val(),
-                Avatar: $('#Avatar').val(),
+                Avatar: $('#ImageFile').val(),
                 CategoryId: $('#cboNewsCategoryId').val(),
+                DateUpdate: $('#DateUpdate').val(),
                 Status: $('#Status').is(':checked') // Lấy giá trị checked của trường Status
             };
             data.push({ name: 'news.Title', value: news.Title });
@@ -48,6 +51,9 @@
             data.push({ name: 'news.Avatar', value: news.Avatar });
             data.push({ name: 'news.CategoryId', value: news.CategoryId });
             data.push({ name: 'news.Status', value: news.Status });
+            data.push({ name: 'news.Id', value: news.Id });
+            data.push({ name: 'news.UserId', value: news.UserId });
+            data.push({ name: 'news.DateUpdate', value: news.DateUpdate });
            
             $.ajax({
                 url: $(this).data('action'),
@@ -76,18 +82,21 @@
             $('#alert-fail').addClass('hidden');
             var id = $(this).data('id');
             //@Url.Action("Edit", "Users")
-            $.get('/Admin/Users/Edit', { id: id })
+            $.get('/Admin/News/Edit', { id: id })
                 .done(function (response) {
                     if (response.success) {
                         $('#modal-form').modal('show');
-                        $('.modal-title').text('Chỉnh sửa người dùng');
-                        $('#btn-save').attr('data-action', '/Admin/Users/Edit');
-                        $('#UserId').val(response.data.id);
-                        $('#UserName').val(response.data.userName);
-                        $('#FullName').val(response.data.fullName);
-                        $('#cboRoleId').val(response.data.roleId);
-                        $('#Address').val(response.data.address);
-                        $('#Email').val(response.data.email);
+                        $('.modal-title').text('Chỉnh sửa tin tức');
+                        $('#btn-save').attr('data-action', '/Admin/News/Edit');
+                        $('#Id').val(response.data.id);
+                        $('#Title').val(response.data.title);
+                        $('#Description').val(response.data.description);
+                        $('#SubjectContent').val(response.data.subjectContent);
+                        $('#ImageFile').val(response.data.avatar);
+                        $('#cboNewsCategoryId').val(response.data.categoryId);
+                        $('#DateUpdate').val(response.data.dateUpdate);
+                        $('#UserId').val(response.data.userId);
+                        $('#preview').attr('src','../Upload/Images/'+ response.data.avatar);
                         $('#Status').prop('checked', response.data.status);
                     } else {
                         alert(response.message);
@@ -96,6 +105,31 @@
                 .fail(function (error) {
                     console.log(error);
                 });
+        });
+
+        $('#uploadButton').click(function () {
+            var fileInput = $('#fileInput').get(0);
+            var file = fileInput.files[0];
+
+            var formData = new FormData();
+            formData.append("file", file);
+
+            $.ajax({
+                url: '/Admin/News/Upload',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    // Xử lý phản hồi từ server (nếu cần)
+                    $('#preview').attr('src', '../Upload/Images/' + response.data.avatar);
+                    $('#ImageFile').val(response.data.avatar);
+                    console.log("Upload thành công");
+                },
+                error: function (error) {
+                    // Xử lý lỗi (nếu có)
+                }
+            });
         });
 
         // Delete product

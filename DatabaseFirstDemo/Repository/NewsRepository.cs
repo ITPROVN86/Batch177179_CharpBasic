@@ -17,6 +17,6 @@ namespace DatabaseFirstDemo.Repository
         public void Delete(News news)=>NewsDao.Instance.Delete(news);
         public IEnumerable<NewsCategory> GetAllNewsCategory()=>NewsDao.Instance.GetAllNewsCategory();
         public bool ChangeStatus(int id)=> NewsDao.Instance.ChangeStatus(id);
-        public List<News> GetNewsByKeyword(string keyword, string sortBy, int? categoryId)=> NewsDao.Instance.GetNewsByKeyword(keyword, sortBy, categoryId);
+        public IEnumerable<News> GetNewsByKeyword(string keyword, string sortBy, int? categoryId)=> NewsDao.Instance.GetNewsByKeyword(keyword, sortBy, categoryId);
     }
 }

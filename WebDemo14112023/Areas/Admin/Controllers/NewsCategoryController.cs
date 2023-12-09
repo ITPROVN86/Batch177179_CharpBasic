@@ -1,20 +1,25 @@
 ﻿using DatabaseFirstDemo.Models;
 using DatabaseFirstDemo.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebDemo14112023.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public class NewsCategoryController : BaseController
     {
         INewsCategoryRepository newsCategoryRepository = null;
         public NewsCategoryController()
         {
+ 
             newsCategoryRepository = new NewsCategoryRepository();
         }
 
         public IActionResult Index()
         {
+    
             /*ProductMangementBatch177Context _context = new ProductMangementBatch177Context();
             var list = _context.NewsCategories.ToList();*/
             var result = newsCategoryRepository.GetAll();

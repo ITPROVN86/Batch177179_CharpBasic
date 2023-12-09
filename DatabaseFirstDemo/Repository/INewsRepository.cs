@@ -16,6 +16,6 @@ namespace DatabaseFirstDemo.Repository
         void Delete(News news);
         IEnumerable<NewsCategory> GetAllNewsCategory();
         bool ChangeStatus(int id);
-        List<News> GetNewsByKeyword(string keyword, string sortBy, int? categoryId);
+        IEnumerable<News> GetNewsByKeyword(string keyword, string sortBy, int? categoryId);
     }
 }

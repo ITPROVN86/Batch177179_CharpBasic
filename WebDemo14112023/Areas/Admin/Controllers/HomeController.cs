@@ -22,7 +22,7 @@ namespace WebDemo14112023.Areas.Admin.Controllers
         {
             // Đăng xuất người dùng
             HttpContext.SignOutAsync("Admin");
-
+            SetAlert("Đăng xuất thành công!", "success");
             // Chuyển hướng đến trang đăng nhập hoặc trang chính
             return RedirectToAction("Index", "Login", new { area = "Admin" }); // Thay thế bằng tên trang đăng nhập hoặc trang chính của bạn
         }

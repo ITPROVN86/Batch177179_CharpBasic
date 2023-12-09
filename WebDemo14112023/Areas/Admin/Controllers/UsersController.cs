@@ -1,6 +1,7 @@
 ﻿using DatabaseFirstDemo.DAO;
 using DatabaseFirstDemo.Models;
 using DatabaseFirstDemo.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,8 @@ using X.PagedList;
 namespace WebDemo14112023.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public class UsersController : BaseController
     {
         IUsersRepository userRepository = null;
