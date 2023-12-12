@@ -1,4 +1,5 @@
-﻿@model IEnumerable<DatabaseFirstDemo.Models.News>
+﻿@model WebDemo14112023.Areas.Admin.Models.NewsCategoryUsers;
+@using DatabaseFirstDemo.Models;
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
 @{
@@ -13,6 +14,25 @@
                 Quản lý Tin tức
             </header>
             <div class="panel-body">
+                @using (Html.BeginForm("Index", "News", FormMethod.Get, new { id = "form-search" }))
+                {
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                @Html.TextBox("SearchString", TempData["searchString"],null,new {@class="form-control", @placeholder="Nhập từ khoá cần tìm kiếm"})
+                            </div>
+                            <div class="col-lg-4">
+                                @Html.DropDownList("CategoryId", (SelectList)ViewBag.NewsCategory,"-- Chọn danh mục --", new { @class =
+                            "form-control", @id = "cboSearchNewsCategoryId", @onchange = "callIndexAction(this)" })
+                            </div>
+                            <div class="col-lg-4">
+                                <input type="submit" onclick="return DisplayProgressMessage(this, 'Searching...');" class="btn btn-danger" value="Tìm kiếm" />
+                            </div>
+                        </div>
+                    </div>
+                    <div style="clear: both"></div>
+                }
+
                 <div class="col-md-12" style="margin-top:10px">
                     <p>
                         <a class="btn btn-danger create">Tạo mới</a>
@@ -28,37 +48,46 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
+                                <th>#</th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Title)
+                                    Tiêu đề
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Description)
+                                    Mô tả
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.SubjectContent)
+                                    Ngày cập nhật
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.DateUpdate)
+                                    Trạng thái
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Status)
+                                    Ảnh đại diện
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Avatar)
+                                    Danh mục nhóm tin
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Category)
+                                    Người đăng
                                 </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.User)
-                                </th>
-                                <th></th>
+                                <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @{
+                                int dem = 1;
+                                int page = Convert.ToInt32(Context.Request.Query["page"]);
+                                if (page > 1)
+                                {
+                                    dem = (page - 1) * 5 + 1;
+                                }
+                            }
+                            @foreach (var item in Model.News)
                             {
+                                User user = Model.Users.SingleOrDefault(u => u.UserId == item.UserId);
+                                NewsCategory newsCategory = Model.NewsCategory.SingleOrDefault(n => n.Id == item.CategoryId);
                                 <tr>
+                                    <td>@dem</td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Title)
                                     </td>
@@ -66,34 +95,33 @@
                                         @Html.DisplayFor(modelItem => item.Description)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.SubjectContent)
-                                    </td>
-                                    <td>
                                         @item.DateUpdate.ToString("dd/MM/yyyy")
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Status)
+                                        <a href="#" class="btn @((bool)item.Status ? "btn-danger" : "btn-default") btn-active"
+                                           data-id="@item.Id">@((bool)item.Status ? "Kích hoạt" : "Khóa")</a>
+                                    </td>
+                                    <td align="center">
+                                        <img src="@Url.Content(@item.Avatar==null? "~/Upload/images/no-thumbnail.png":"~/Upload/Images/"+@item.Avatar)" style="border: 1px solid #c8c8c8;width:150px;height: 120px; border-radius: 50%;" />
+                                    </td>
+                                    <td align="center">
+                                        @newsCategory.CategoryName
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Avatar)
+                                        @user.UserName
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Category.CategoryName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.User.Password)
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-danger edit" data-id="@item.Id">Sửa</button>&nbsp;
-                                        <button class="btn btn-danger detail" data-id="@item.Id">Chi tiết</button>&nbsp;
-                                        <a class="btn btn-danger delete" data-id="@item.Id">Xoá</a>
+                                        <button class="btn btn-danger edit form-control" data-id="@item.Id">Sửa</button>&nbsp;
+                                        <button class="btn btn-danger detail form-control" data-id="@item.Id">Chi tiết</button>&nbsp;
+                                        <a class="btn btn-danger delete form-control" data-id="@item.Id">Xoá</a>
                                     </td>
                                 </tr>
+                                dem = dem + 1;
                             }
                         </tbody>
                     </table>
                     <div class="pull-right">
-                        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new {page = page,
+                        @Html.PagedListPager((IPagedList)Model.News, page => Url.Action("Index", new {page = page,
                         SearchString = @Context.Request.Query["SearchString"], sortby = @Context.Request.Query["sortby"]}),
                         new X.PagedList.Web.Common.PagedListRenderOptions {
                         LiElementClasses = new string[] {"page-item"},
@@ -121,11 +149,12 @@
                     </div>
                     <div class="form-group">
                         <label for="Description">Mô tả</label>
-                        <input type="text" class="form-control" id="Description" name="Description" placeholder="Nhập mô tả">
+                        <textarea class="form-control" id="Description" name="Description" placeholder="Nhập mô tả" rows="4"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="SubjectContent">Nội dung</label>
-                        <input type="text" class="form-control" id="SubjectContent" name="SubjectContent" placeholder="Nhập nội dung tin" required>
+                
+                        <div id="editor"></div>
                     </div>
                     <div class="form-group">
                         <label for="CategoryId">Danh mục tin tức</label>
@@ -134,11 +163,11 @@
                     </div>
                     <div class="form-group">
                         <label for="Avatar">Ảnh đại diện</label>
-                        <img id="preview" src="@Url.Content(ViewBag.Anh==null?"~/Admin/images/avatar1.jpg":"~/Upload/images/"+ViewBag.Anh)" class="rounded-circle" height="40" width="40" />
+                        <img id="preview" src="@Url.Content(ViewBag.Anh==null?"~/Upload/images/no-thumbnail.png":"~/Upload/images/"+ViewBag.Anh)" class="rounded-circle" height="40" width="40" />
                         <input type="file" name="file" id="fileInput">
                         <button type="button" id="uploadButton">Upload</button>
-                        <input type="hidden" id="ImageFile" name="ImageFile"/>
-                       @*  <input type="text" class="form-control" id="Avatar" name="Avatar" placeholder="Nhập địa chỉ ảnh đại diện" required> *@
+                        <input type="hidden" id="ImageFile" name="ImageFile" />
+                        @*  <input type="text" class="form-control" id="Avatar" name="Avatar" placeholder="Nhập địa chỉ ảnh đại diện" required> *@
                     </div>
                     <div class="form-group">
                         <label for="DateUpdate">Ngày cập nhật</label>
@@ -195,6 +224,49 @@
 <div class="processing-preview hidden">
 </div>
 @section scripts{
+    <script src="
+https://cdn.jsdelivr.net/npm/ckeditor5-classic-free-full-feature@35.4.1/build/ckeditor.min.js
+"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#editor'),{
+                plugins: ['Essentials',
+                    'Paragraph',
+                    'Heading',
+                    'Bold',
+                    'Italic',
+                    'Underline',
+                    'Strikethrough',
+                    'SourceEditing',
+                    'Subscript',
+                    'Superscript',
+                    'Alignment',
+                    'Indent',
+                    'IndentBlock',
+                    'BlockQuote',
+                    'Link',
+                    'Image',
+                    'ImageCaption',
+                    'ImageStyle',
+                    'ImageToolbar',
+                    'ImageUpload',
+                    'List',
+                    'MediaEmbed',
+                    'PasteFromOffice',
+                    'Table',
+                    'TableToolbar',
+                    'TableProperties',
+                    'TableCellProperties',
+                    'Highlight',
+                    'FontFamily',
+                    'FontSize',
+                    'FontColor',
+                    'FontBackgroundColor', 'GeneralHtmlSupport', /* ... */]
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
     @{
         DateTime date = DateTime.Now;

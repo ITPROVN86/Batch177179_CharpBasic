@@ -34,12 +34,19 @@
             var data = form.serializeArray();
             // Lấy giá trị từ các trường thuộc tính của news trong form
             // Ví dụ:
+            const domEditableElement = document.querySelector('.ck-editor__editable_inline');
+
+            // Get the editor instance from the editable element.
+            const editorInstance = domEditableElement.ckeditorInstance;
+
+            // Use the editor instance API.
+            //editorInstance.setData(response.data.subjectContent);
             var news = {
                 Id: $('#Id').val(),
                 UserId: $('#UserId').val(),
                 Title: $('#Title').val(),
                 Description: $('#Description').val(),
-                SubjectContent: $('#SubjectContent').val(),
+                SubjectContent: editorInstance.getData(),
                 Avatar: $('#ImageFile').val(),
                 CategoryId: $('#cboNewsCategoryId').val(),
                 DateUpdate: $('#DateUpdate').val(),
@@ -91,7 +98,16 @@
                         $('#Id').val(response.data.id);
                         $('#Title').val(response.data.title);
                         $('#Description').val(response.data.description);
-                        $('#SubjectContent').val(response.data.subjectContent);
+                        //$('#SubjectContent').val(response.data.subjectContent);
+                        //$('.ck-editor__editable_inline').text(response.data.subjectContent);
+                        // A reference to the editor editable element in the DOM.
+                        const domEditableElement = document.querySelector('.ck-editor__editable_inline');
+
+                        // Get the editor instance from the editable element.
+                        const editorInstance = domEditableElement.ckeditorInstance;
+
+                        // Use the editor instance API.
+                        editorInstance.setData(response.data.subjectContent);
                         $('#ImageFile').val(response.data.avatar);
                         $('#cboNewsCategoryId').val(response.data.categoryId);
                         $('#DateUpdate').val(response.data.dateUpdate);
@@ -145,7 +161,7 @@
             //var url = '/NewsCategory/Delete/' + id;
             //console.log(id);
             //@Url.Action("Delete", "Users")
-            $.post('/Admin/Users/Delete', { userId: id })
+            $.post('/Admin/News/Delete', { userId: id })
                 .done(function (response) {
                     if (response.success) {
                         $('#modal-delete').modal('hide');
