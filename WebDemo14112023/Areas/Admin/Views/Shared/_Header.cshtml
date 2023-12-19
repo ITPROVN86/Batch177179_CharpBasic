@@ -199,13 +199,15 @@
             <!-- user login dropdown start-->
             <li class="dropdown">
                 @{
-                    var user = User as ClaimsPrincipal;
-                    var userName = user?.FindFirstValue(ClaimTypes.Name);
-                    if (userName != null)
+                    var fullNameClaim = ((ClaimsIdentity)User.Identity).FindFirst("FullName");
+                    string fullName = fullNameClaim?.Value;
+                    //var user = User as ClaimsPrincipal;
+                    //var userName = user?.FindFirstValue(ClaimTypes.Name);
+                    if (!string.IsNullOrEmpty(fullName))
                     {
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <img alt="" src="@Url.Content("~/Admin/images/avatar1_small.jpg")">
-                            <span class="username">@userName</span>
+                            <span class="username">@fullName</span>
                             <b class="caret"></b>
                         </a>
 

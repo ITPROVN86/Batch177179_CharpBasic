@@ -1,0 +1,295 @@
+﻿@model WebDemo14112023.Areas.Admin.Models.ProductsCategoryUsers;
+@using DatabaseFirstDemo.Models;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@{
+    ViewData["Title"] = "Quản lý Sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <section class="panel">
+            <header class="panel-heading">
+                Quản lý Sản phẩm
+            </header>
+            <div class="panel-body">
+                @using (Html.BeginForm("Index", "Products", FormMethod.Get, new { id = "form-search" }))
+                {
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                @Html.TextBox("SearchString", TempData["searchString"],null,new {@class="form-control", @placeholder="Nhập từ khoá cần tìm kiếm"})
+                            </div>
+                            <div class="col-lg-4">
+                                @Html.DropDownList("CategoryId", (SelectList)ViewBag.ProductCategory,"-- Chọn danh mục --", new { @class =
+                            "form-control", @id = "cboSearchProductsCategoryId", @onchange = "callIndexAction(this)" })
+                            </div>
+                            <div class="col-lg-4">
+                                <input type="submit" onclick="return DisplayProgressMessage(this, 'Searching...');" class="btn btn-danger" value="Tìm kiếm" />
+                            </div>
+                        </div>
+                    </div>
+                    <div style="clear: both"></div>
+                }
+
+                <div class="col-md-12" style="margin-top:10px">
+                    <p>
+                        <a class="btn btn-danger create">Tạo mới</a>
+                    </p>
+                    @{
+                        if (TempData["AlertMessage"] != null)
+                        {
+                            <div id="alertBox" class="alert @TempData["Type"]">
+                                @TempData["AlertMessage"]
+                            </div>
+                        }
+                    }
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>
+                                    Tiêu đề
+                                </th>
+                                <th>
+                                    Mô tả
+                                </th>
+                                <th>
+                                    Giá cả
+                                </th>
+                                <th>
+                                    Số lượng
+                                </th>
+                                <th>
+                                    Ngày cập nhật
+                                </th>
+                                <th>
+                                    Ảnh đại diện
+                                </th>
+                                <th>
+                                    Danh mục
+                                </th>
+                                <th>
+                                    Người tạo
+                                </th>
+                                <th>
+                                    Trạng thái
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int dem = 1;
+                                int page = Convert.ToInt32(Context.Request.Query["page"]);
+                                if (page > 1)
+                                {
+                                    dem = (page - 1) * 5 + 1;
+                                }
+                            }
+                            @foreach (var item in Model.Products)
+                            {
+                                User user = Model.Users.SingleOrDefault(u => u.UserId == item.UserId);
+                                ProductCategory productCategory = Model.ProductsCategory.SingleOrDefault(n => n.Id == item.CategoryId);
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Price)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Quanlity)
+                                    </td>
+                                    <td>
+                                        @item.DateUpdate.ToString("dd/MM/yyyy")
+                                    </td>
+                                    <td>
+                                        <img src="@Url.Content(@item.Avatar==null? "~/Upload/images/no-thumbnail.png":"~/Upload/Images/"+@item.Avatar)" style="border: 1px solid #c8c8c8;width:150px;height: 120px; border-radius: 50%;" />
+                                    </td>
+                                    <td align="center">
+                                        <img src="@Url.Content(@item.Avatar==null? "~/Upload/images/no-thumbnail.png":"~/Upload/Images/"+@item.Avatar)" style="border: 1px solid #c8c8c8;width:150px;height: 120px; border-radius: 50%;" />
+                                    </td>
+                                    <td align="center">
+                                        @productCategory.CategoryName
+                                    </td>
+                                    <td>
+                                        @user.UserName
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn @((bool)item.Status ? "btn-danger" : "btn-default") btn-active"
+                                           data-id="@item.Id">@((bool)item.Status ? "Kích hoạt" : "Khóa")</a>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger edit form-control" data-id="@item.Id">Sửa</button>&nbsp;
+                                        <button class="btn btn-danger detail form-control" data-id="@item.Id">Chi tiết</button>&nbsp;
+                                        <a class="btn btn-danger delete form-control" data-id="@item.Id">Xoá</a>
+                                    </td>
+                                </tr>
+                                dem = dem + 1;
+                            }
+                        </tbody>
+                    </table>
+                    <div class="pull-right">
+                        @Html.PagedListPager((IPagedList)Model.Products, page => Url.Action("Index", new {page = page,
+                        SearchString = @Context.Request.Query["SearchString"], sortby = @Context.Request.Query["sortby"]}),
+                        new X.PagedList.Web.Common.PagedListRenderOptions {
+                        LiElementClasses = new string[] {"page-item"},
+                        PageClasses = new string[] { "page-link" }
+                        })
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div id="modal-form" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <form id="form-news" method="post" action="#" enctype="multipart/form-data">
+                    <div class="alert alert-danger hidden" id="alert-fail"></div>
+                    <div class="form-group">
+                        <label for="Title">Tiêu đề</label>
+                        <input type="text" class="form-control" id="Title" name="Title" placeholder="Nhập tiêu đề bài viết" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Description">Mô tả</label>
+                        <textarea class="form-control" id="Description" name="Description" placeholder="Nhập mô tả" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="SubjectContent">Nội dung</label>
+                        <div id="editor"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Price">Giá cả</label>
+                        <input type="text" class="form-control" id="Price" name="Price" placeholder="Nhập giá cả" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Quanlity">Số lượng</label>
+                        <input type="text" class="form-control" id="Quanlity" name="Quanlity" placeholder="Nhập số lượng" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="CategoryId">Danh mục sản phẩm</label>
+                        @Html.DropDownList("CategoryId", (SelectList)ViewBag.ProductCategory, new { @class =
+                        "form-control", @id = "cboProductsCategoryId" })
+                    </div>
+                    <div class="form-group">
+                        <label for="Avatar">Ảnh đại diện</label>
+                        <img id="preview" src="@Url.Content(ViewBag.Anh==null?"~/Upload/images/no-thumbnail.png":"~/Upload/images/"+ViewBag.Anh)" class="rounded-circle" height="40" width="40" />
+                        <input type="file" name="file" id="fileInput">
+                        <button type="button" id="uploadButton">Upload</button>
+                        <input type="hidden" id="ImageFile" name="ImageFile" />
+                    </div>
+                    <div class="form-group">
+                        <label for="DateUpdate">Ngày cập nhật</label>
+                        <input type="text" disabled class="form-control" id="DateUpdate" name="DateUpdate" placeholder="Nhập ngày cập nhật" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Status">Trạng thái</label>
+                        @Html.CheckBox("Status", true)
+                    </div>
+
+                    <input type="hidden" id="Id" name="Id" />
+                    <input type="hidden" id="UserId" name="UserId" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="btn-save">Lưu lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete Modal -->
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc muốn xóa mục này?
+                <!-- Hidden field to store the id of the product -->
+                <input type="hidden" id="delete-id">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="btn-delete">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-fail" tabindex="1" role="dialog" aria-labelledby="failModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Yêu cầu nhập đầy đủ thông tin vào Form
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="processing-preview hidden">
+</div>
+@section scripts{
+    <script src="
+https://cdn.jsdelivr.net/npm/ckeditor5-classic-free-full-feature@35.4.1/build/ckeditor.min.js
+"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                plugins: ['Essentials',
+                    'Paragraph',
+                    'Heading',
+                    'Bold',
+                    'Italic',
+                    'Underline',
+                    'Strikethrough',
+                    'SourceEditing',
+                    'Subscript',
+                    'Superscript',
+                    'Alignment',
+                    'Indent',
+                    'IndentBlock',
+                    'BlockQuote',
+                    'Link',
+                    'Image',
+                    'ImageCaption',
+                    'ImageStyle',
+                    'ImageToolbar',
+                    'ImageUpload',
+                    'List',
+                    'MediaEmbed',
+                    'PasteFromOffice',
+                    'Table',
+                    'TableToolbar',
+                    'TableProperties',
+                    'TableCellProperties',
+                    'Highlight',
+                    'FontFamily',
+                    'FontSize',
+                    'FontColor',
+                    'FontBackgroundColor', 'GeneralHtmlSupport', /* ... */]
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    @{
+        DateTime date = DateTime.Now;
+    }
+    <script src="~/admin/js/controllers/productController.js?v=@date.Ticks"></script>
+    <script src="~/admin/js/controllers/common.js?v=@date.Ticks"></script>
+                    }

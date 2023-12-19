@@ -114,6 +114,7 @@ public partial class ProductMangementBatch177Context : DbContext
             entity.Property(e => e.DateUpdate).HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(500);
             entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.SubjectContent).HasColumnType("ntext");
             entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Status)
                 .IsRequired()

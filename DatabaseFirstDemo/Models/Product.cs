@@ -12,6 +12,7 @@ public partial class Product
     public string Name { get; set; }
 
     public string Description { get; set; }
+    public string SubjectContent { get; set; }
 
     public string Avatar { get; set; }
 

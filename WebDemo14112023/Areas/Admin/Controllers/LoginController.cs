@@ -15,9 +15,9 @@ namespace WebDemo14112023.Areas.Admin.Controllers
         {
             userRepository = new UsersRepository();
         }
-        public IActionResult Index(string ReturnUrl=null)
+        public IActionResult Index(string ReturnUrl = null)
         {
-            TempData["ReturnUrl"]=ReturnUrl;
+            TempData["ReturnUrl"] = ReturnUrl;
             return View();
         }
 
@@ -39,6 +39,7 @@ namespace WebDemo14112023.Areas.Admin.Controllers
                     //represent attributes of the subject that are useful in the context of authentication and authorization operations.
                     var claims = new List<Claim>() {
                         new Claim(ClaimTypes.Name, username),
+                         new Claim("FullName", user.UserName),
                         new Claim(ClaimTypes.Role, "Admin"),
                     };
                     //Initialize a new instance of the ClaimsIdentity with the claims and authentication scheme    
