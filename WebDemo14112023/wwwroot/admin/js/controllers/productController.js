@@ -1,12 +1,11 @@
-﻿var news = {
+﻿var products = {
     init: function () {
-        news.registerEvents();
+        products.registerEvents();
     },
     registerEvents: function () {
-        // Detail news
+        // Detail products
         $(document).on('click', '.detail', function () {
             var id = $(this).data('id');
-            //@Url.Action("Detail", "Users")
             $.get('/Admin/Products/Detail', { id: id })
                 .done(function (response) {
                     if (response.success) {
@@ -27,12 +26,12 @@
                     console.log(error);
                 });
         });
-        // Save news
+        // Save products
         $(document).on('click', '#btn-save', function (event) {
             event.preventDefault();  // Chặn hành động gửi form mặc định
-            var form = $('#form-news');
+            var form = $('#form-products');
             var data = form.serializeArray();
-            // Lấy giá trị từ các trường thuộc tính của news trong form
+            // Lấy giá trị từ các trường thuộc tính của products trong form
             // Ví dụ:
             const domEditableElement = document.querySelector('.ck-editor__editable_inline');
 
@@ -41,30 +40,39 @@
 
             // Use the editor instance API.
             //editorInstance.setData(response.data.subjectContent);
+            var _date = $('#DateUpdate').val();
+            //tách ngày tháng năm
+            var slice = _date.split('/');
+            var day = parseInt(slice[0], 10);
+            var month = parseInt(slice[1], 10);
+            var year = parseInt(slice[2], 10);
+            var caseDate = month + '/' + day + '/' + year;
+            console.log(`Date: ` + caseDate);
             var products = {
                 Id: $('#Id').val(),
+                DateUpdate: caseDate,
                 UserId: $('#UserId').val(),
                 Title: $('#Title').val(),
                 Description: $('#Description').val(),
                 SubjectContent: editorInstance.getData(),
                 Avatar: $('#ImageFile').val(),
-                CategoryId: $('#cboNewsCategoryId').val(),
+                CategoryId: $('#cboProductsCategoryId').val(),
                 Price: $('#Price').val(),
-                Quanlity: $('#Quanlity').val(),
-                DateUpdate: $('#DateUpdate').val(),
+                Quanlity: $('#Quanlity').val(),               
                 Status: $('#Status').is(':checked') // Lấy giá trị checked của trường Status
             };
-            data.push({ name: 'news.Title', value: products.Title });
-            data.push({ name: 'news.Description', value: products.Description });
-            data.push({ name: 'news.SubjectContent', value: products.SubjectContent });
-            data.push({ name: 'news.Avatar', value: products.Avatar });
-            data.push({ name: 'news.CategoryId', value: products.CategoryId });
-            data.push({ name: 'news.Price', value: products.Price });
-            data.push({ name: 'news.Quanlity', value: products.Quanlity });
-            data.push({ name: 'news.Status', value: products.Status });
-            data.push({ name: 'news.Id', value: products.Id });
-            data.push({ name: 'news.UserId', value: products.UserId });
-            data.push({ name: 'news.DateUpdate', value: products.DateUpdate });
+            data.push({ name: 'products.DateUpdate', value: products.DateUpdate });
+            data.push({ name: 'products.Name', value: products.Title });
+            data.push({ name: 'products.Description', value: products.Description });
+            data.push({ name: 'products.SubjectContent', value: products.SubjectContent });
+            data.push({ name: 'products.Avatar', value: products.Avatar });
+            data.push({ name: 'products.CategoryId', value: products.CategoryId });
+            data.push({ name: 'products.Price', value: products.Price });
+            data.push({ name: 'products.Quanlity', value: products.Quanlity });
+            data.push({ name: 'products.Status', value: products.Status });
+            data.push({ name: 'products.Id', value: products.Id });
+            data.push({ name: 'products.UserId', value: products.UserId });
+            
            
             $.ajax({
                 url: $(this).data('action'),
@@ -94,13 +102,11 @@
                 .done(function (response) {
                     if (response.success) {
                         $('#modal-form').modal('show');
-                        $('.modal-title').text('Chỉnh sửa tin tức');
+                        $('.modal-title').text('Chỉnh sửa sản phẩm');
                         $('#btn-save').attr('data-action', '/Admin/Products/Edit');
                         $('#Id').val(response.data.id);
-                        $('#Title').val(response.data.title);
+                        $('#Title').val(response.data.name);
                         $('#Description').val(response.data.description);
-                        //$('#SubjectContent').val(response.data.subjectContent);
-                        //$('.ck-editor__editable_inline').text(response.data.subjectContent);
                         // A reference to the editor editable element in the DOM.
                         const domEditableElement = document.querySelector('.ck-editor__editable_inline');
 
@@ -109,8 +115,7 @@
 
                         // Use the editor instance API.
                         editorInstance.setData(response.data.subjectContent);
-                        $('#Title').val(response.data.title);
-                        $('#Description').val(response.data.description);
+
                         $('#ImageFile').val(response.data.avatar);
                         $('#cboProductsCategoryId').val(response.data.categoryId);
                         $('#Price').val(response.data.price);
@@ -184,7 +189,7 @@
             $('.modal-title').text('Tạo mới sản phẩm');
             //@Url.Action("Create", "Users")
             $('#btn-save').attr('data-action', '/Admin/Products/Create');
-            $('#form-news').trigger('reset');
+            $('#form-products').trigger('reset');
         });
         $('.btn-active').off('click').on('click', function (e) {
             e.preventDefault();//Nếu sự kiện click đã được click thì
@@ -213,4 +218,4 @@
         });
     }
 }
-news.init();
+products.init();
