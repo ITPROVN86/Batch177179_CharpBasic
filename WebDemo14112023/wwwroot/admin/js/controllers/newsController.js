@@ -41,13 +41,13 @@
 
             // Use the editor instance API.
             //editorInstance.setData(response.data.subjectContent);
-            var _date = $('#DateUpdate').val();
-            //tách ngày tháng năm
-            var slice = _date.split('/');
-            var day = parseInt(slice[0], 10);
-            var month = parseInt(slice[1], 10);
-            var year = parseInt(slice[2], 10);
-            var caseDate = month + '/' + day + '/' + year;
+            function convertDate(date) {
+                var slice = date.split('/');
+                var day = parseInt(slice[0], 10);
+                var month = parseInt(slice[1], 10);
+                var year = parseInt(slice[2], 10);
+                return month + '/' + day + '/' + year;
+            }
             var news = {
                 Id: $('#Id').val(),
                 UserId: $('#UserId').val(),
@@ -56,7 +56,7 @@
                 SubjectContent: editorInstance.getData(),
                 Avatar: $('#ImageFile').val(),
                 CategoryId: $('#cboNewsCategoryId').val(),
-                DateUpdate: caseDate,
+                DateUpdate: convertDate($('#DateUpdate').val()),
                 Status: $('#Status').is(':checked') // Lấy giá trị checked của trường Status
             };
             data.push({ name: 'news.Title', value: news.Title });

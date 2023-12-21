@@ -40,17 +40,16 @@
 
             // Use the editor instance API.
             //editorInstance.setData(response.data.subjectContent);
-            var _date = $('#DateUpdate').val();
-            //tách ngày tháng năm
-            var slice = _date.split('/');
-            var day = parseInt(slice[0], 10);
-            var month = parseInt(slice[1], 10);
-            var year = parseInt(slice[2], 10);
-            var caseDate = month + '/' + day + '/' + year;
-            console.log(`Date: ` + caseDate);
+            function convertDate(date) {
+                var slice = date.split('/');
+                var day = parseInt(slice[0], 10);
+                var month = parseInt(slice[1], 10);
+                var year = parseInt(slice[2], 10);
+                return month + '/' + day + '/' + year;
+            }
             var products = {
                 Id: $('#Id').val(),
-                DateUpdate: caseDate,
+                DateUpdate: convertDate($('#DateUpdate').val()),
                 UserId: $('#UserId').val(),
                 Title: $('#Title').val(),
                 Description: $('#Description').val(),
